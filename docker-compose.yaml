@@ -1,0 +1,7 @@
+version: '3.9'
+
+services:
+  web:
+    image: "akshu2091/node-app-test-new:latest"     #add the image name 
+    ports:
+      - "8000:8000"     
