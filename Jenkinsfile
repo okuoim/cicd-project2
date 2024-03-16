@@ -1,5 +1,9 @@
 pipeline {
-    agent { label "dev-server"}
+    agent any
+    environment{
+        SONAR_HOME = tool "Sonar"
+    }
+    
     
     stages {
         
@@ -7,6 +11,26 @@ pipeline {
             steps{
                 git url: "https://github.com/akshu20791/cicd-project2/", branch: "master"
                 echo 'code cloned'
+            }
+        }
+        stage("SonarQube Analysis"){
+            steps{
+               withSonarQubeEnv("Sonar"){
+                   sh "$SONAR_HOME/bin/sonar-scanner -Dsonar.projectName=nodetodo -Dsonar.projectKey=nodetodo -X"
+               }
+            }
+        }
+        stage("SonarQube Quality Gates"){
+            steps{
+               timeout(time: 1, unit: "MINUTES"){
+                   waitForQualityGate abortPipeline: false
+               }
+            }
+        }
+        stage("OWASP"){
+            steps{
+                dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'OWASP'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
         stage("build and test"){
@@ -30,10 +54,18 @@ pipeline {
                 }
             }
         }
-        stage("deploy"){
-            steps{
-                sh "docker-compose down && docker-compose up -d"
-                echo 'deployment is completed'
+       stage('Deploy') {
+            steps {
+               script {
+                   // def dockerrm = 'sudo docker rm -f My-first-containe221 || true'
+                    def dockerCmd = 'docker-compose down && docker-compose up -d'
+                    sshagent(['sshkeypair']) {
+                        //chnage the private ip in below code
+                        // sh "docker run -itd --name My-first-containe211 -p 8082:80 akshu20791/2febimg:v1"
+                        // sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.81.253 ${dockerrm}"
+                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 ${dockerCmd}"
+                    }
+                }
             }
         }
     }
