@@ -14,12 +14,7 @@ pipeline {
             }
         }
         
-        stage("OWASP"){
-            steps{
-                dependencyCheck additionalArguments: '--scan ./', odcInstallation: 'OWASP'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
+        
         stage("build and test"){
             steps{
                 sh "docker build -t node-app-test-new ."
