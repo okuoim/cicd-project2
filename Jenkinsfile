@@ -45,6 +45,7 @@ pipeline {
                         //chnage the private ip in below code
                         // sh "docker run -itd --name My-first-containe211 -p 8082:80 akshu20791/2febimg:v1"
                         // sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.81.253 ${dockerrm}"
+                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 wget https://raw.githubusercontent.com/akshu20791/cicd-project2/master/docker-compose.yaml
                          sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 ${dockerCmd}"
                     }
                 }
