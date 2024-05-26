@@ -9,7 +9,7 @@ pipeline {
         
         stage("code"){
             steps{
-                git url: "https://github.com/akshu20791/cicd-project2/", branch: "master"
+                git url: "https://github.com/okuoim/cicd-project2/", branch: "master"
                 echo 'code cloned'
             }
         }
@@ -43,9 +43,9 @@ pipeline {
                     def dockerCmd = 'docker-compose up -d'
                     sshagent(['sshkeypair']) {
                         //chnage the private ip in below code
-                        // sh "docker run -itd --name My-first-containe211 -p 8082:80 akshu20791/2febimg:v1"
+                        // sh "docker run -itd --name My-first-containe211 -p 8082:80 okuoim/2febimg:v1"
                        //  sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 ${dockerbuild}"
-                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 wget https://raw.githubusercontent.com/akshu20791/cicd-project2/master/docker-compose.yaml"
+                         sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 wget https://raw.githubusercontent.com/okuoim/cicd-project2/master/docker-compose.yaml"
                          sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 chmod 777 docker-compose.yaml"
                          sh "ssh -o StrictHostKeyChecking=no ubuntu@172.31.36.171 ${dockerCmd}"
                     }
